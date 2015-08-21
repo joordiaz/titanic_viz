@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+
+    <!-- Style for visualization title -->
+    <style>
+      h2, body {
+        text-align: center;
+      }
+    </style>
+
+    <script type="text/javascript">
+      function draw(data) {
+      
+        /*
+          D3.js setup code
+        */
+
+        "use strict";
+        var margin = 75,
+            width = 800 - margin,
+            height = 400 - margin;
+
+        /* Add Title to visualization */
+        d3.select("body").append("h2").text("Titanic Survivors by Class and Gender");
+
+        var svg = d3.select("body")
+          .append("svg")
+          .attr("width", width + margin)
+          .attr("height", height + margin)
+          .append('g')
+          .attr('class','chart');
+
+        /*
+          Dimple.js Chart construction code
+        */
+        var myChart = new dimple.chart(svg, data);
+        var x = myChart.addCategoryAxis("x", ["Passenger Class", "Gender"]); 
+        myChart.addMeasureAxis("y", "Number of Passengers");
+        /* Facet chart by Outcome Survived/Perished */
+        var s = myChart.addSeries("Outcome", dimple.plot.bar);
+        /* Add Legend and adjust location */
+        var myLegend = myChart.addLegend(320, 10, 380, 20, "right");
+        /* Change default colors */
+        myChart.defaultColors = [
+          new dimple.color("#81DAF5"),
+          new dimple.color("#0B3861")
+          ];
+
+        myChart.draw();
+
+      };
+    </script>
+  </head>
+<body>
+  <script type="text/javascript">
+    /*
+      Use D3 to load the CSV file
+      and pass the contents of it to the draw function
+      */
+    d3.csv("titanic_class_gender_outcome2.csv", draw);
+  </script>
+</body>
+</html>
